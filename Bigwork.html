@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head >
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="js/style.css">
+    <script src="js/animate.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js" ></script>
+</head>
+<body>
+    <div class="body">
+        <div class="tips">
+            <img id="imgs" src="images/a15.png" alt=""/>
+            <div id="affiche">
+                <div class="affiche_text">
+                [温馨提示]，最近有不法分子在网上骗人，请大家注意!!!
+                </div>
+            </div>
+        </div>
+        <div id="box" class="box">
+            <div id="slider" class="slider">
+                <div class="slide"><img class="img1" src="images/b5.png" alt=""/></div>
+                <div class="slide"><img class="img1" src="images/b1.png" alt=""/></div>
+                <div class="slide"><img class="img1" src="images/b2.png" alt=""/></div>
+                <div class="slide"><img class="img1" src="images/b3.png" alt=""/></div>
+                <div class="slide"><img class="img1" src="images/b4.png" alt=""/></div>
+                <div class="slide"><img class="img1" src="images/b5.png" alt=""/></div>
+                <div class="slide"><img class="img1" src="images/b1.png" alt=""/></div>
+            </div>
+            <span id="left"><</span>
+            <span id="right">></span>
+            <ul class="nav" id="nav">
+                <li class="active">&nbsp1</li> 
+                <li>&nbsp2</li>
+                <li>&nbsp3</li>
+                <li>&nbsp4</li>
+                <li>&nbsp5</li>
+            </ul>
+        </div>
+    </div>
+</body>
+    <script>
+        var box=document.getElementById("box");
+        var oNavList=document.getElementById("nav").children;
+        var slider=document.getElementById("slider");
+        var left=document.getElementById("left");
+        var right=document.getElementById("right");
+        var index=1;
+        var timer;
+        var isMoving=false;
+        var tips=document.getElementById("tips");
+        box.onmouseover=function(){
+            animate(left,{opacity:50});
+            animate(right,{opacity:50});
+            clearInterval(timer);
+        }
+        box.onmouseout=function(){
+            animate(left,{opacity:0});
+            animate(right,{opacity:0});
+            timer=setInterval(next,3000);
+        }
+        right.onclick=next;
+        left.onclick=prev;
+        for(var i=0;i<oNavList.length;++i){
+            oNavList[i].index=i;
+            oNavList[i].onclick=function(){
+                index=this.index+1;
+                navmove();
+                animate(slider,{left:-1200*index});
+            }
+        }
+        function next(){
+            if(isMoving){
+                return ;
+            }
+            isMoving=true;
+            index++;
+            navmove();
+            animate(slider,{left:-1200*index},function(){
+                if(index==6){
+                    slider.style.left="-1200px";
+                    index=1;
+                }
+                isMoving=false;
+            });
+        }
+        function prev(){
+            if(isMoving){
+                return ;
+            }
+            isMoving=true;
+            index--;
+            navmove();
+            animate(slider,{left:-1200*index},function(){
+                if(index==0){
+                    slider.style.left="-6000px";
+                    index=5;
+                }
+                isMoving=false;
+            });
+        }
+        function navmove(){
+            for(var i=0;i<oNavList.length;++i){
+                oNavList[i].className="";
+            }
+            if(index>5){
+                oNavList[0].className="active";
+            }else if(index<=0){
+                oNavList[4].className="active";
+            }else{
+                oNavList[index-1].className="active";
+            }
+            timer=setInterval(next,3000);
+        }
+        (function(){var timer = setTimeout(this.marquee, 1000);}());
+        function marquee() {
+            var scrollWidth = $('#affiche').width();
+            var textWidth = $('.affiche_text').width();
+            var i = scrollWidth;
+            setInterval(function() {
+                i--;
+                if(i < -textWidth ) {
+                i = scrollWidth;
+                }
+                $('.affiche_text').animate({'left': i+'px'}, 20);
+            }, 20);
+        }
+
+
+
+    </script>
+</html>
